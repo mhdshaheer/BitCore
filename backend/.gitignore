@@ -1,0 +1,35 @@
+# ============================================================
+# Backend .gitignore — NestJS / MongoDB
+# ============================================================
+
+# ── Node ────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Build output ────────────────────────────────────────────
+dist/
+
+# ── TypeScript incremental cache ────────────────────────────
+*.tsbuildinfo
+
+# ── Environment / secrets ────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Database files (legacy SQLite — no longer used) ─────────
+*.sqlite
+*.db
+
+# ── Test coverage ───────────────────────────────────────────
+coverage/
+
+# ── Logs ────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── OS generated ────────────────────────────────────────────
+.DS_Store
+Thumbs.db

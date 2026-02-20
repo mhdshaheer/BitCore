@@ -1,0 +1,47 @@
+# ============================================================
+# Root .gitignore — BitCore Monorepo
+# ============================================================
+
+# ── OS generated ────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Editor / IDE ────────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+.history/
+*.swp
+*.swo
+
+# ── Node ────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp
+.pnp.js
+
+# ── Environment / secrets ────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Build artefacts ─────────────────────────────────────────
+dist/
+build/
+out/
+out-tsc/
+tmp/
