@@ -37,7 +37,7 @@ import { PrimaryButtonComponent } from '../../../shared/components/button/primar
         </a>
       </div>
 
-      <form *ngIf="!isSuccess()" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <form *ngIf="!isSuccess()" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
         <app-input-field
           label="Full Name"
           type="text"
@@ -62,7 +62,7 @@ import { PrimaryButtonComponent } from '../../../shared/components/button/primar
           errorMessage="Minimum 6 characters required"
         ></app-input-field>
 
-        <div class="pt-2">
+        <div class="pt-1">
           <app-primary-button type="submit" [loading]="loading" [disabled]="registerForm.invalid">
             Create Account
           </app-primary-button>

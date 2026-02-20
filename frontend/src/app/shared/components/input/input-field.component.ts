@@ -7,8 +7,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="w-full space-y-1.5">
-      <label *ngIf="label" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide">
+    <div class="w-full space-y-1">
+      <label *ngIf="label" class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-0.5">
         {{ label }}
       </label>
       

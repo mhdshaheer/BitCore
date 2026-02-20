@@ -21,7 +21,7 @@ import { PrimaryButtonComponent } from '../../../shared/components/button/primar
   ],
   template: `
     <app-form-wrapper description="Sign in to manage your shortened links.">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
         <app-input-field
           label="Email Address"
           type="email"
@@ -38,15 +38,15 @@ import { PrimaryButtonComponent } from '../../../shared/components/button/primar
           errorMessage="Password is required"
         ></app-input-field>
 
-        <div class="flex items-center justify-between pt-1">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" class="w-3.5 h-3.5 border-slate-300 text-primary-600 focus:ring-primary-500/20 rounded">
-            <span class="text-xs text-slate-600 font-medium">Remember me</span>
+        <div class="flex items-center justify-between -mt-1">
+          <label class="flex items-center gap-2 group cursor-pointer">
+            <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500/20 transition-all cursor-pointer">
+            <span class="text-[13px] text-slate-500 font-semibold group-hover:text-slate-700 transition-colors">Remember me</span>
           </label>
-          <a href="#" class="text-xs font-semibold text-primary-600 hover:text-primary-700">Forgot password?</a>
+          <a href="#" class="text-[13px] font-bold text-primary-600 hover:text-primary-700 transition-colors">Forgot password?</a>
         </div>
 
-        <div class="pt-2">
+        <div class="pt-1">
           <app-primary-button type="submit" [loading]="loading" [disabled]="loginForm.invalid">
             Sign In
           </app-primary-button>
