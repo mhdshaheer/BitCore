@@ -25,7 +25,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async update(id: string, data: Partial<User>): Promise<User> {
-    return await this._model.findByIdAndUpdate(id, data, { new: true }).exec() as User;
+    return (await this._model
+      .findByIdAndUpdate(id, data, { new: true })
+      .exec()) as User;
   }
 
   async findByVerificationToken(token: string): Promise<User | null> {

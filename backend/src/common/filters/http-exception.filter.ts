@@ -28,7 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         const typed = res as HttpExceptionResponse;
         message = Array.isArray(typed.message)
           ? typed.message[0]
-          : typed.message ?? exception.message;
+          : (typed.message ?? exception.message);
       } else {
         message = exception.message;
       }

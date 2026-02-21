@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Body, UseGuards, Request, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Request,
+  Param,
+  Res,
+} from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/url.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -11,7 +20,10 @@ export class UrlController {
 
   @UseGuards(JwtAuthGuard)
   @Post('shorten')
-  async shorten(@Body() createUrlDto: CreateUrlDto, @Request() req: JwtRequest) {
+  async shorten(
+    @Body() createUrlDto: CreateUrlDto,
+    @Request() req: JwtRequest,
+  ) {
     return this._urlService.createUrl(createUrlDto, req.user.userId);
   }
 

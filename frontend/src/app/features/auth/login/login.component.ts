@@ -46,10 +46,21 @@ import { PrimaryButtonComponent } from '../../../shared/components/button/primar
           <a href="#" class="text-[13px] font-bold text-primary-600 hover:text-primary-700 transition-colors">Forgot password?</a>
         </div>
 
-        <div class="pt-1">
+        <div class="pt-1 flex flex-col gap-3">
           <app-primary-button type="submit" [loading]="loading" [disabled]="loginForm.invalid">
             Sign In
           </app-primary-button>
+          
+          <button 
+            *ngIf="showResend" 
+            type="button"
+            (click)="onResend()"
+            [disabled]="resending"
+            class="text-[13px] font-bold text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center gap-2 py-2"
+          >
+            <span *ngIf="resending" class="w-3.5 h-3.5 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"></span>
+            Lost verification link? Resend Link
+          </button>
         </div>
       </form>
 
@@ -72,6 +83,8 @@ export class LoginComponent {
   });
 
   loading = false;
+  showResend = false;
+  resending = false;
 
   getControl(name: string): FormControl {
     return this.loginForm.get(name) as FormControl;
@@ -80,6 +93,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.loading = true;
+      this.showResend = false;
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           this.toastService.show('Signed in successfully');
@@ -87,11 +101,34 @@ export class LoginComponent {
         },
         error: (err) => {
           this.loading = false;
-          this.toastService.show(err.error?.message || 'Authentication failed', 'error');
+          const message = err.error?.message || 'Authentication failed';
+          this.toastService.show(message, 'error');
+          
+          if (message.toLowerCase().includes('verify your email')) {
+            this.showResend = true;
+          }
         }
       });
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  onResend() {
+    const email = this.loginForm.get('email')?.value;
+    if (!email) return;
+
+    this.resending = true;
+    this.authService.resendVerification(email).subscribe({
+      next: (res) => {
+        this.resending = false;
+        this.showResend = false;
+        this.toastService.show(res.message || 'Verification link resent');
+      },
+      error: (err) => {
+        this.resending = false;
+        this.toastService.show(err.error?.message || 'Failed to resend link', 'error');
+      }
+    });
   }
 }

@@ -23,12 +23,20 @@ export class UrlRepository implements IUrlRepository {
     return await this._model.findOne({ shortCode }).exec();
   }
 
-  async findByOriginalUrlAndUserId(originalUrl: string, userId: string): Promise<Url | null> {
-    return await this._model.findOne({ originalUrl, userId: new Types.ObjectId(userId) }).exec();
+  async findByOriginalUrlAndUserId(
+    originalUrl: string,
+    userId: string,
+  ): Promise<Url | null> {
+    return await this._model
+      .findOne({ originalUrl, userId: new Types.ObjectId(userId) })
+      .exec();
   }
 
   async findByUserId(userId: string): Promise<Url[]> {
-    return await this._model.find({ userId: new Types.ObjectId(userId) }).sort({ createdAt: -1 }).exec();
+    return await this._model
+      .find({ userId: new Types.ObjectId(userId) })
+      .sort({ createdAt: -1 })
+      .exec();
   }
 
   async incrementClicks(id: string): Promise<void> {

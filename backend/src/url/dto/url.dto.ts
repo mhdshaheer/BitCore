@@ -1,4 +1,4 @@
-import { IsUrl, IsNotEmpty, IsString } from 'class-validator';
+import { IsUrl, IsNotEmpty } from 'class-validator';
 
 export class CreateUrlDto {
   @IsUrl({}, { message: 'Invalid URL format' })

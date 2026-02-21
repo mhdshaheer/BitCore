@@ -6,9 +6,7 @@ import { UrlService } from './url.service';
 import { UrlController, RedirectController } from './url.controller';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Url.name, schema: UrlSchema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: Url.name, schema: UrlSchema }])],
   controllers: [UrlController, RedirectController],
   providers: [
     UrlService,

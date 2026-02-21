@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import type { IUrlRepository } from './interfaces/url-repository.interface';
 import { CreateUrlDto } from './dto/url.dto';
 import { MESSAGES } from '../common/constants/messages';
@@ -17,7 +17,10 @@ export class UrlService {
     const { originalUrl } = createUrlDto;
 
     // Check if user already shortened this URL
-    const existingUrl = await this._urlRepository.findByOriginalUrlAndUserId(originalUrl, userId);
+    const existingUrl = await this._urlRepository.findByOriginalUrlAndUserId(
+      originalUrl,
+      userId,
+    );
     if (existingUrl) {
       return {
         message: MESSAGES.URL_CREATED,
@@ -26,11 +29,14 @@ export class UrlService {
     }
 
     const shortCode = this.generateShortCode();
-    
+
     // Ensure unique short code (retry if exists, though highly unlikely with 6 chars)
     let finalCode = shortCode;
     let attempts = 0;
-    while (await this._urlRepository.findByShortCode(finalCode) && attempts < 5) {
+    while (
+      (await this._urlRepository.findByShortCode(finalCode)) &&
+      attempts < 5
+    ) {
       finalCode = this.generateShortCode();
       attempts++;
     }
@@ -70,7 +76,7 @@ export class UrlService {
 
   async deleteUrl(id: string, userId: string) {
     const urls = await this._urlRepository.findByUserId(userId);
-    const target = urls.find(u => u._id.toString() === id);
+    const target = urls.find((u) => u._id.toString() === id);
     if (!target) {
       throw new NotFoundException(MESSAGES.URL_NOT_FOUND);
     }

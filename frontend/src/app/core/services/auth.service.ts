@@ -21,6 +21,10 @@ export class AuthService {
     return this.http.post<ApiResponse<void>>(`${this.apiUrl}/verify`, { token });
   }
 
+  resendVerification(email: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/resend-verification`, { email });
+  }
+
   login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, data).pipe(
       tap(res => {
