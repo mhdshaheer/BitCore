@@ -28,9 +28,8 @@ services:
         value: '"BitCore" <noreply@bitcore.com>'
 
   # ── Frontend: Angular Static Site ────────────────────────────────────────
-  - type: static
+  - type: static_site
     name: bitcore-frontend
-    env: static
     rootDir: frontend
     # This command updates the production URL before building
     buildCommand: |
