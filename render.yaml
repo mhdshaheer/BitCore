@@ -1,0 +1,46 @@
+services:
+  # ── Backend: NestJS Web Service ──────────────────────────────────────────
+  - type: web
+    name: bitcore-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: NODE_VERSION
+        value: 18.0.0
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false # Set in Render Dashboard
+      - key: JWT_SECRET
+        sync: false # Set in Render Dashboard
+      - key: FRONTEND_URL
+        sync: false # Set this to your frontend URL after deployment
+      - key: EMAIL_SERVICE
+        value: gmail
+      - key: EMAIL_USER
+        sync: false # Set in Render Dashboard
+      - key: EMAIL_PASS
+        sync: false # Set in Render Dashboard
+      - key: MAIL_FROM
+        value: '"BitCore" <noreply@bitcore.com>'
+
+  # ── Frontend: Angular Static Site ────────────────────────────────────────
+  - type: static
+    name: bitcore-frontend
+    env: static
+    rootDir: frontend
+    # This command updates the production URL before building
+    buildCommand: |
+      npm install
+      npm run build
+    publishPath: dist/frontend/browser
+    envVars:
+      - key: NODE_VERSION
+        value: 18.0.0
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
