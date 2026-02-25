@@ -21,6 +21,9 @@ export class User extends Document {
 
   @Prop({ type: Date, default: null })
   verificationTokenExpires: Date | null;
+
+  @Prop({ type: String, default: null, select: false })
+  refreshToken: string | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

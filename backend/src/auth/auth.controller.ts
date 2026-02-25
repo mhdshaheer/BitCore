@@ -30,4 +30,10 @@ export class AuthController {
   async resendVerification(@Body('email') email: string) {
     return this._authService.resendVerification(email);
   }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.SUCCESS)
+  async refresh(@Body('refreshToken') refreshToken: string) {
+    return this._authService.refreshToken(refreshToken);
+  }
 }

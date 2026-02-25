@@ -25,6 +25,18 @@ export class AuthService {
     private readonly _mailService: MailService,
   ) {}
 
+  private async generateTokens(userId: string, email: string) {
+    const payload = { sub: userId, email };
+    const accessToken = await this._jwtService.signAsync(payload, {
+      expiresIn: '15m',
+    });
+    const refreshToken = await this._jwtService.signAsync(payload, {
+      expiresIn: '7d',
+    });
+
+    return { accessToken, refreshToken };
+  }
+
   private async sendVerificationEmail(
     email: string,
     fullName: string,
@@ -112,8 +124,16 @@ export class AuthService {
       throw new UnauthorizedException(MESSAGES.INVALID_CREDENTIALS);
     }
 
-    const payload = { email: user.email, sub: user._id.toString() };
-    const accessToken = this._jwtService.sign(payload);
+    const { accessToken, refreshToken } = await this.generateTokens(
+      user._id.toString(),
+      user.email,
+    );
+
+    // Hash refresh token before saving to DB
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this._userRepository.update(user._id.toString(), {
+      refreshToken: hashedRefreshToken,
+    });
 
     const userObj = user.toJSON();
     const { password: _pw, ...userWithoutPassword } = userObj;
@@ -122,6 +142,7 @@ export class AuthService {
       data: {
         user: userWithoutPassword,
         accessToken,
+        refreshToken,
       },
     };
   }
@@ -182,5 +203,39 @@ export class AuthService {
     return {
       message: 'Verification link resent. Please check your email.',
     };
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const payload = await this._jwtService.verifyAsync(refreshToken);
+      const user = await this._userRepository.findById(payload.sub);
+
+      if (!user || !user.refreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const isRefreshTokenValid = await bcrypt.compare(
+        refreshToken,
+        user.refreshToken,
+      );
+      if (!isRefreshTokenValid) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const tokens = await this.generateTokens(user._id.toString(), user.email);
+
+      // Update refresh token in DB (Refresh token rotation)
+      const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, 10);
+      await this._userRepository.update(user._id.toString(), {
+        refreshToken: hashedRefreshToken,
+      });
+
+      return {
+        message: 'Tokens refreshed successfully',
+        data: tokens,
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
   }
 }

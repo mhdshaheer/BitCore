@@ -6,9 +6,11 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { GlobalErrorHandler } from './core/services/error.handler';
 import { ErrorHandler } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    CookieService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

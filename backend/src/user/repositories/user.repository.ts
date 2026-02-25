@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    return await this._model.findById(id).exec();
+    return await this._model.findById(id).select('+refreshToken').exec();
   }
 
   async update(id: string, data: Partial<User>): Promise<User> {

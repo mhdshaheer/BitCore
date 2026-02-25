@@ -8,20 +8,20 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class UrlService {
-  private readonly apiUrl = `${environment.apiUrl}/url`;
+  private readonly _apiUrl = `${environment.apiUrl}/url`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private _http: HttpClient) {}
 
   shorten(originalUrl: string): Observable<ApiResponse<Url>> {
-    return this.http.post<ApiResponse<Url>>(`${this.apiUrl}/shorten`, { originalUrl });
+    return this._http.post<ApiResponse<Url>>(`${this._apiUrl}/shorten`, { originalUrl });
   }
 
   getMyUrls(): Observable<ApiResponse<Url[]>> {
-    return this.http.get<ApiResponse<Url[]>>(`${this.apiUrl}/my-urls`);
+    return this._http.get<ApiResponse<Url[]>>(`${this._apiUrl}/my-urls`);
   }
 
   deleteUrl(id: string): Observable<ApiResponse<void>> {
-    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`, {});
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/delete/${id}`, {});
   }
 
   getShortUrl(code: string): string {
