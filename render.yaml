@@ -5,11 +5,13 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install --legacy-peer-deps && npm run build
+    buildCommand: npm install && npm run build
     startCommand: npm run start:prod
     envVars:
       - key: NODE_VERSION
-        value: 18.0.0
+        value: 20.0.0
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: true
       - key: PORT
         value: 10000
       - key: MONGODB_URI
@@ -32,11 +34,13 @@ services:
     name: bitcore-frontend
     runtime: static
     rootDir: frontend
-    buildCommand: npm install --legacy-peer-deps && npm run build
+    buildCommand: npm install && npm run build
     staticPublishPath: dist/frontend/browser
     envVars:
       - key: NODE_VERSION
-        value: 18.0.0
+        value: 20.0.0
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: true
     routes:
       - type: rewrite
         source: /*
