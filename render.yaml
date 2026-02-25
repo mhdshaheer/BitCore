@@ -2,7 +2,7 @@ services:
   # ── Backend: NestJS Web Service ──────────────────────────────────────────
   - type: web
     name: bitcore-backend
-    env: node
+    runtime: node
     plan: free
     rootDir: backend
     buildCommand: npm install && npm run build
@@ -28,14 +28,12 @@ services:
         value: '"BitCore" <noreply@bitcore.com>'
 
   # ── Frontend: Angular Static Site ────────────────────────────────────────
-  - type: static_site
+  - type: web
     name: bitcore-frontend
+    runtime: static
     rootDir: frontend
-    # This command updates the production URL before building
-    buildCommand: |
-      npm install
-      npm run build
-    publishPath: dist/frontend/browser
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/frontend/browser
     envVars:
       - key: NODE_VERSION
         value: 18.0.0
