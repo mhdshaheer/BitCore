@@ -1,5 +1,5 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiResponse, AuthResponse, User, RegisterRequest, LoginRequest } from '../models/api-response.model';
@@ -21,16 +21,16 @@ export class AuthService {
     return this._http.post<ApiResponse<User>>(`${this._apiUrl}/register`, data);
   }
 
-  verify(token: string): Observable<ApiResponse<void>> {
-    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/verify`, { token });
+  verify(token: string, context?: HttpContext): Observable<ApiResponse<void>> {
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/verify`, { token }, { context });
   }
 
   resendVerification(email: string): Observable<ApiResponse<void>> {
     return this._http.post<ApiResponse<void>>(`${this._apiUrl}/resend-verification`, { email });
   }
 
-  login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
-    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/login`, data).pipe(
+  login(data: LoginRequest, context?: HttpContext): Observable<ApiResponse<AuthResponse>> {
+    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/login`, data, { context }).pipe(
       tap(res => {
         if (res.success) {
           this._setTokens(res.data.accessToken, res.data.refreshToken);

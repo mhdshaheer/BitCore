@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HttpContext } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
+import { SKIP_ERROR_TOAST } from '../../../core/utils/http-context';
 import { ToastService } from '../../../core/services/toast.service';
 import { FormWrapperComponent } from '../../../shared/components/form-wrapper/form-wrapper.component';
 import { InputFieldComponent } from '../../../shared/components/input/input-field.component';
@@ -101,9 +103,7 @@ export class LoginComponent {
         },
         error: (err) => {
           this.loading = false;
-          const message = err.error?.message || 'Authentication failed';
-          this.toastService.show(message, 'error');
-          
+          const message = err.error?.message || '';
           if (message.toLowerCase().includes('verify your email')) {
             this.showResend = true;
           }
@@ -125,9 +125,8 @@ export class LoginComponent {
         this.showResend = false;
         this.toastService.show(res.message || 'Verification link resent');
       },
-      error: (err) => {
+      error: () => {
         this.resending = false;
-        this.toastService.show(err.error?.message || 'Failed to resend link', 'error');
       }
     });
   }

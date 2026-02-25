@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { HttpContext } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
+import { SKIP_ERROR_TOAST } from '../../../core/utils/http-context';
 import { FormWrapperComponent } from '../../../shared/components/form-wrapper/form-wrapper.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
@@ -62,7 +64,8 @@ export class VerifyComponent {
   }
 
   verifyToken(token: string) {
-    this.authService.verify(token).subscribe({
+    const context = new HttpContext().set(SKIP_ERROR_TOAST, true);
+    this.authService.verify(token, context).subscribe({
       next: () => {
         this.status.set('success');
         this.statusMessage.set('Email Verified');

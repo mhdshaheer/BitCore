@@ -106,10 +106,7 @@ export class RegisterComponent {
           this.isSuccess.set(true);
           this.toastService.show('Verification link sent');
         },
-        error: (err) => {
-          this.loading = false;
-          this.toastService.show(err.error?.message || 'Registration failed', 'error');
-        }
+        error: () => this.loading = false
       });
     } else {
       this.registerForm.markAllAsTouched();

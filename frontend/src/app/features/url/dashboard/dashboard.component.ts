@@ -122,37 +122,34 @@ export class DashboardComponent {
   }
 
   loadStats() {
-    this.urlService.getMyUrls().subscribe({
-      next: (res) => {
-        const urls = res.data;
-        const totalClicks = urls.reduce((acc: number, curr: Url) => acc + curr.clicks, 0);
-        this.stats.set({
-          totalUrls: urls.length,
-          totalClicks,
-          avgClicks: urls.length > 0 ? Math.round((totalClicks / urls.length) * 10) / 10 : 0
-        });
-        this.initialLoading = false;
-      },
-      error: () => this.initialLoading = false
-    });
-  }
-
-  onSubmit() {
-    if (this.urlForm.valid) {
-      this.loading = true;
-      this.urlService.shorten(this.urlForm.value.originalUrl).subscribe({
+      this.urlService.getMyUrls().subscribe({
         next: (res) => {
-          this.loading = false;
-          this.lastShortenedUrl.set(res.data);
-          this.urlForm.reset();
-          this.loadStats();
-          this.toastService.show('URL shortened successfully');
+          const urls = res.data;
+          const totalClicks = urls.reduce((acc: number, curr: Url) => acc + curr.clicks, 0);
+          this.stats.set({
+            totalUrls: urls.length,
+            totalClicks,
+            avgClicks: urls.length > 0 ? Math.round((totalClicks / urls.length) * 10) / 10 : 0
+          });
+          this.initialLoading = false;
         },
-        error: (err) => {
-          this.loading = false;
-          this.toastService.show(err.error?.message || 'Failed to shorten URL', 'error');
-        }
+        error: () => this.initialLoading = false
       });
+    }
+  
+    onSubmit() {
+      if (this.urlForm.valid) {
+        this.loading = true;
+        this.urlService.shorten(this.urlForm.value.originalUrl).subscribe({
+          next: (res) => {
+            this.loading = false;
+            this.lastShortenedUrl.set(res.data);
+            this.urlForm.reset();
+            this.loadStats();
+            this.toastService.show('URL shortened successfully');
+          },
+          error: () => this.loading = false
+        });
     } else {
       this.urlForm.markAllAsTouched();
     }

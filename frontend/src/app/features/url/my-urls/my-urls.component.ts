@@ -177,10 +177,7 @@ export class MyUrlsComponent {
         this.toastService.show('Link deleted');
         this.loadUrls();
       },
-      error: (err) => {
-        this.isDeleting = false;
-        this.toastService.show(err.error?.message || 'Delete failed', 'error');
-      }
+      error: () => this.isDeleting = false
     });
   }
 }
