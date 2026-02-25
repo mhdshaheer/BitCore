@@ -152,9 +152,7 @@ export class MyUrlsComponent {
   }
 
   getShortUrl(code: string): string {
-    const origin = window.location.origin;
-    const base = origin.includes(':4200') ? origin.replace(':4200', ':3000') : origin;
-    return `${base}/api/${code}`;
+    return this.urlService.getShortUrl(code);
   }
 
   copyToClipboard(text: string) {

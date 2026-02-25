@@ -23,4 +23,8 @@ export class UrlService {
   deleteUrl(id: string): Observable<ApiResponse<void>> {
     return this.http.post<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`, {});
   }
+
+  getShortUrl(code: string): string {
+    return `${environment.apiUrl}/${code}`;
+  }
 }
