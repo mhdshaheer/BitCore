@@ -80,7 +80,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const verificationTokenExpires = new Date();
-    verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 24); // 24h expiry
+    verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 24);
 
     const user = await this._userRepository.create({
       ...registerDto,
@@ -90,7 +90,6 @@ export class AuthService {
       isVerified: false,
     });
 
-    // Send actual email
     await this.sendVerificationEmail(
       user.email,
       user.fullName,
@@ -129,7 +128,6 @@ export class AuthService {
       user.email,
     );
 
-    // Hash refresh token before saving to DB
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await this._userRepository.update(user._id.toString(), {
       refreshToken: hashedRefreshToken,
@@ -224,7 +222,6 @@ export class AuthService {
 
       const tokens = await this.generateTokens(user._id.toString(), user.email);
 
-      // Update refresh token in DB (Refresh token rotation)
       const hashedRefreshToken = await bcrypt.hash(tokens.refreshToken, 10);
       await this._userRepository.update(user._id.toString(), {
         refreshToken: hashedRefreshToken,

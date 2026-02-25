@@ -69,9 +69,7 @@ export class AuthService {
   }
 
   private _setTokens(accessToken: string, refreshToken: string) {
-    // Access token - 15m (Server expiry)
     this._cookieService.set('token', accessToken, 7, '/', '', true, 'Strict');
-    // Refresh token - 7d (Server expiry)
     this._cookieService.set('refreshToken', refreshToken, 7, '/', '', true, 'Strict');
   }
 

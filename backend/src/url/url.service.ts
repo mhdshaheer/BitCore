@@ -16,7 +16,6 @@ export class UrlService {
   async createUrl(createUrlDto: CreateUrlDto, userId: string) {
     const { originalUrl } = createUrlDto;
 
-    // Check if user already shortened this URL
     const existingUrl = await this._urlRepository.findByOriginalUrlAndUserId(
       originalUrl,
       userId,
@@ -30,7 +29,6 @@ export class UrlService {
 
     const shortCode = this.generateShortCode();
 
-    // Ensure unique short code (retry if exists, though highly unlikely with 6 chars)
     let finalCode = shortCode;
     let attempts = 0;
     while (

@@ -1,7 +1,6 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
-import { HttpStatus } from '../common/enums/http-status.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -14,25 +13,25 @@ export class AuthController {
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.SUCCESS)
+  @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto) {
     return this._authService.login(loginDto);
   }
 
   @Post('verify')
-  @HttpCode(HttpStatus.SUCCESS)
+  @HttpCode(HttpStatus.OK)
   async verify(@Body('token') token: string) {
     return this._authService.verifyEmail(token);
   }
 
   @Post('resend-verification')
-  @HttpCode(HttpStatus.SUCCESS)
+  @HttpCode(HttpStatus.OK)
   async resendVerification(@Body('email') email: string) {
     return this._authService.resendVerification(email);
   }
 
   @Post('refresh')
-  @HttpCode(HttpStatus.SUCCESS)
+  @HttpCode(HttpStatus.OK)
   async refresh(@Body('refreshToken') refreshToken: string) {
     return this._authService.refreshToken(refreshToken);
   }

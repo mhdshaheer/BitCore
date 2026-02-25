@@ -8,15 +8,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // 404 handled by routing for pages, but for API 404 we might want to show toast
       if (error.status === 404) {
         console.error('API Resource not found:', error.url);
       }
-      // 500+ Server Errors
       else if (error.status >= 500) {
         router.navigate(['/500']);
       }
-      // Network failures (status 0)
       else if (error.status === 0) {
         router.navigate(['/500'], { queryParams: { type: 'offline' } });
       }

@@ -11,19 +11,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
   const refreshToken = authService.getRefreshToken();
 
-  // 1. Proactive Refresh: 
-  // If we have NO Access Token but WE HAVE a Refresh Token, try to refresh immediately.
-  // Exclude auth routes to avoid loops.
   if (!token && refreshToken && !isAuthRoute(req.url)) {
     return handle401Error(req, next, authService);
   }
 
-  // 2. Add Token Header if exists
   if (token) {
     req = addTokenHeader(req, token);
   }
 
-  // 3. Handle Errors
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       // Handle 401 Unauthorized (except for login/register/refresh endpoints)
