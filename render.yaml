@@ -5,7 +5,7 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm run start:prod
     envVars:
       - key: NODE_VERSION
@@ -32,7 +32,7 @@ services:
     name: bitcore-frontend
     runtime: static
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     staticPublishPath: dist/frontend/browser
     envVars:
       - key: NODE_VERSION
