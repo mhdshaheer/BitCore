@@ -1,17 +1,18 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { APP_ROUTES } from './core/constants/routes';
 
 export const routes: Routes = [
   {
-    path: 'auth/login',
+    path: APP_ROUTES.AUTH.LOGIN,
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
-    path: 'auth/register',
+    path: APP_ROUTES.AUTH.REGISTER,
     loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
   {
-    path: 'auth/verify',
+    path: APP_ROUTES.AUTH.VERIFY,
     loadComponent: () => import('./features/auth/verify/verify.component').then(m => m.VerifyComponent)
   },
   {
@@ -20,22 +21,22 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'dashboard',
+        path: APP_ROUTES.DASHBOARD,
         loadComponent: () => import('./features/url/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
       {
-        path: 'my-urls',
+        path: APP_ROUTES.MY_URLS,
         loadComponent: () => import('./features/url/my-urls/my-urls.component').then(m => m.MyUrlsComponent)
       },
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: APP_ROUTES.DASHBOARD,
         pathMatch: 'full'
       }
     ]
   },
   {
-    path: '404',
+    path: APP_ROUTES.ERROR.NOT_FOUND,
     loadComponent: () => import('./features/error/error-page.component').then(m => m.ErrorPageComponent),
     data: {
       code: '404',
@@ -44,7 +45,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: '500',
+    path: APP_ROUTES.ERROR.SERVER_ERROR,
     loadComponent: () => import('./features/error/error-page.component').then(m => m.ErrorPageComponent),
     data: {
       code: '500',
@@ -55,12 +56,12 @@ export const routes: Routes = [
   {
     path: 'error',
     children: [
-      { path: '404', redirectTo: '/404', pathMatch: 'full' },
-      { path: '500', redirectTo: '/500', pathMatch: 'full' }
+      { path: '404', redirectTo: `/${APP_ROUTES.ERROR.NOT_FOUND}`, pathMatch: 'full' },
+      { path: '500', redirectTo: `/${APP_ROUTES.ERROR.SERVER_ERROR}`, pathMatch: 'full' }
     ]
   },
   {
     path: '**',
-    redirectTo: '404'
+    redirectTo: APP_ROUTES.ERROR.NOT_FOUND
   }
 ];

@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { NavbarComponent } from '../../shared/components/layout/navbar.component';
 import { SidebarComponent } from '../../shared/components/layout/sidebar.component';
+import { APP_ROUTES } from '../../core/constants/routes';
 
 @Component({
   selector: 'app-layout',
@@ -41,6 +42,6 @@ export class LayoutComponent {
 
   handleLogout() {
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate([`/${APP_ROUTES.AUTH.LOGIN}`]);
   }
 }

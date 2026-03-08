@@ -12,10 +12,11 @@ import {
 import { CreateUrlDto } from './dto/url.dto';
 import { IUrlService } from './interfaces/url-service.interface';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ROUTES } from '../common/constants/routes';
 import type { JwtRequest } from '../auth/interfaces/jwt-request.interface';
 import type { Response } from 'express';
 
-@Controller('url')
+@Controller(ROUTES.URL.PREFIX)
 export class UrlController {
   constructor(
     @Inject('IUrlService')
@@ -23,7 +24,7 @@ export class UrlController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('shorten')
+  @Post(ROUTES.URL.SHORTEN)
   async shorten(
     @Body() createUrlDto: CreateUrlDto,
     @Request() req: JwtRequest,
@@ -32,26 +33,26 @@ export class UrlController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('my-urls')
+  @Get(ROUTES.URL.MY_URLS)
   async getMyUrls(@Request() req: JwtRequest) {
     return this._urlService.getMyUrls(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('delete/:id')
+  @Post(ROUTES.URL.DELETE)
   async deleteUrl(@Param('id') id: string, @Request() req: JwtRequest) {
     return this._urlService.deleteUrl(id, req.user.userId);
   }
 }
 
-@Controller('')
+@Controller(ROUTES.REDIRECT.PREFIX)
 export class RedirectController {
   constructor(
     @Inject('IUrlService')
     private readonly _urlService: IUrlService,
   ) {}
 
-  @Get(':code')
+  @Get(ROUTES.REDIRECT.CODE)
   async redirect(@Param('code') code: string, @Res() res: Response) {
     const result = await this._urlService.resolveUrl(code);
     return res.redirect(result.data.originalUrl);

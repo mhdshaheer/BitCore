@@ -2,6 +2,7 @@ import { Component, inject, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { User } from '../../../core/models/api-response.model';
+import { APP_ROUTES } from '../../../core/constants/routes';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,7 @@ import { User } from '../../../core/models/api-response.model';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
           </button>
-          <a routerLink="/dashboard" class="flex items-center gap-2">
+          <a [routerLink]="'/' + routes.DASHBOARD" class="flex items-center gap-2">
             <div class="w-7 h-7 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">B</div>
             <span class="text-lg font-bold text-slate-900 tracking-tight">BitCore</span>
           </a>
@@ -38,4 +39,5 @@ import { User } from '../../../core/models/api-response.model';
 export class NavbarComponent {
   @Input() user: User | null = null;
   @Output() toggleSidebar = new EventEmitter<void>();
+  routes = APP_ROUTES;
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ApiResponse, AuthResponse, User, RegisterRequest, LoginRequest } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
+import { API_ROUTES, APP_ROUTES } from '../constants/routes';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +15,23 @@ export class AuthService {
   private _http = inject(HttpClient);
   private _router = inject(Router);
   
-  private readonly _apiUrl = `${environment.apiUrl}/auth`;
+  private readonly _apiUrl = `${environment.apiUrl}/${API_ROUTES.AUTH.PREFIX}`;
   currentUser = signal<User | null>(this.getUserFromStorage());
 
   register(data: RegisterRequest): Observable<ApiResponse<User>> {
-    return this._http.post<ApiResponse<User>>(`${this._apiUrl}/register`, data);
+    return this._http.post<ApiResponse<User>>(`${this._apiUrl}/${API_ROUTES.AUTH.REGISTER}`, data);
   }
 
   verify(token: string, context?: HttpContext): Observable<ApiResponse<void>> {
-    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/verify`, { token }, { context });
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/${API_ROUTES.AUTH.VERIFY}`, { token }, { context });
   }
 
   resendVerification(email: string): Observable<ApiResponse<void>> {
-    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/resend-verification`, { email });
+    return this._http.post<ApiResponse<void>>(`${this._apiUrl}/${API_ROUTES.AUTH.RESEND_VERIFICATION}`, { email });
   }
 
   login(data: LoginRequest, context?: HttpContext): Observable<ApiResponse<AuthResponse>> {
-    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/login`, data, { context }).pipe(
+    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/${API_ROUTES.AUTH.LOGIN}`, data, { context }).pipe(
       tap(res => {
         if (res.success) {
           this._setTokens(res.data.accessToken, res.data.refreshToken);
@@ -46,7 +47,7 @@ export class AuthService {
     this._cookieService.delete('refreshToken', '/');
     localStorage.removeItem('user');
     this.currentUser.set(null);
-    this._router.navigate(['/auth/login']);
+    this._router.navigate([`/${APP_ROUTES.AUTH.LOGIN}`]);
   }
 
   getToken(): string | null {
@@ -59,7 +60,7 @@ export class AuthService {
 
   refreshTokens(): Observable<ApiResponse<AuthResponse>> {
     const refreshToken = this.getRefreshToken();
-    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/refresh`, { refreshToken }).pipe(
+    return this._http.post<ApiResponse<AuthResponse>>(`${this._apiUrl}/${API_ROUTES.AUTH.REFRESH}`, { refreshToken }).pipe(
       tap(res => {
         if (res.success) {
           this._setTokens(res.data.accessToken, res.data.refreshToken);

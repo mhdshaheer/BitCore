@@ -10,6 +10,8 @@ import { FormWrapperComponent } from '../../../shared/components/form-wrapper/fo
 import { InputFieldComponent } from '../../../shared/components/input/input-field.component';
 import { PrimaryButtonComponent } from '../../../shared/components/button/primary-button.component';
 
+import { APP_ROUTES } from '../../../core/constants/routes';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -99,7 +101,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           this.toastService.show('Signed in successfully');
-          this.router.navigate(['/dashboard']);
+          this.router.navigate([`/${APP_ROUTES.DASHBOARD}`]);
         },
         error: (err) => {
           this.loading = false;
