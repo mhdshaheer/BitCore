@@ -103,9 +103,16 @@ export class LoginComponent {
         },
         error: (err) => {
           this.loading = false;
-          const message = err.error?.message || '';
-          if (message.toLowerCase().includes('verify your email')) {
+          const message: string = err.error?.message || 'Something went wrong. Please try again.';
+          const lowerMsg = message.toLowerCase();
+
+          if (lowerMsg.includes('verify your email')) {
             this.showResend = true;
+            this.toastService.show(message, 'error');
+          } else if (lowerMsg.includes('invalid credentials')) {
+            this.toastService.show('No account found with these credentials. Please check your email and password.', 'error');
+          } else {
+            this.toastService.show(message, 'error');
           }
         }
       });
