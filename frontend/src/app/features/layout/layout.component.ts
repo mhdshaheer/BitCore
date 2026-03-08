@@ -13,15 +13,15 @@ import { SidebarComponent } from '../../shared/components/layout/sidebar.compone
   template: `
     <div class="min-h-screen bg-slate-50 flex flex-col">
       <app-toast></app-toast>
-      
-      <app-navbar 
-        [user]="currentUser()" 
+
+      <app-navbar
+        [user]="currentUser()"
         (toggleSidebar)="sidebarOpen.set(!sidebarOpen())"
       ></app-navbar>
 
       <div class="flex flex-1 max-w-[1600px] mx-auto w-full relative">
-        <app-sidebar 
-          [isOpen]="sidebarOpen()" 
+        <app-sidebar
+          [isOpen]="sidebarOpen()"
           (close)="sidebarOpen.set(false)"
           (onLogout)="handleLogout()"
         ></app-sidebar>
@@ -31,12 +31,11 @@ import { SidebarComponent } from '../../shared/components/layout/sidebar.compone
         </main>
       </div>
     </div>
-  `
+  `,
 })
 export class LayoutComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-  
   currentUser = this.authService.currentUser;
   sidebarOpen = signal(false);
 

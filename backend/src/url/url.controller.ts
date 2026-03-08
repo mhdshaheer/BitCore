@@ -7,16 +7,20 @@ import {
   Request,
   Param,
   Res,
+  Inject,
 } from '@nestjs/common';
-import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/url.dto';
+import { IUrlService } from './interfaces/url-service.interface';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { JwtRequest } from '../auth/interfaces/jwt-request.interface';
 import type { Response } from 'express';
 
 @Controller('url')
 export class UrlController {
-  constructor(private readonly _urlService: UrlService) {}
+  constructor(
+    @Inject('IUrlService')
+    private readonly _urlService: IUrlService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('shorten')
@@ -42,7 +46,10 @@ export class UrlController {
 
 @Controller('')
 export class RedirectController {
-  constructor(private readonly _urlService: UrlService) {}
+  constructor(
+    @Inject('IUrlService')
+    private readonly _urlService: IUrlService,
+  ) {}
 
   @Get(':code')
   async redirect(@Param('code') code: string, @Res() res: Response) {

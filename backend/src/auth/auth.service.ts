@@ -13,16 +13,18 @@ import type { IUserRepository } from '../user/interfaces/user-repository.interfa
 import { MESSAGES } from '../common/constants/messages';
 
 import { ConfigService } from '@nestjs/config';
-import { MailService } from '../mail/mail.service';
+import { IMailService } from '../mail/interfaces/mail-service.interface';
+import { IAuthService } from './interfaces/auth-service.interface';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     @Inject('IUserRepository')
     private readonly _userRepository: IUserRepository,
     private readonly _jwtService: JwtService,
     private readonly _configService: ConfigService,
-    private readonly _mailService: MailService,
+    @Inject('IMailService')
+    private readonly _mailService: IMailService,
   ) {}
 
   private async generateTokens(userId: string, email: string) {

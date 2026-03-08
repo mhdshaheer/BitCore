@@ -5,9 +5,10 @@ import { MESSAGES } from '../common/constants/messages';
 import * as crypto from 'crypto';
 
 import { Types } from 'mongoose';
+import { IUrlService } from './interfaces/url-service.interface';
 
 @Injectable()
-export class UrlService {
+export class UrlService implements IUrlService {
   constructor(
     @Inject('IUrlRepository')
     private readonly _urlRepository: IUrlRepository,

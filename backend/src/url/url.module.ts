@@ -9,11 +9,15 @@ import { UrlController, RedirectController } from './url.controller';
   imports: [MongooseModule.forFeature([{ name: Url.name, schema: UrlSchema }])],
   controllers: [UrlController, RedirectController],
   providers: [
-    UrlService,
+    {
+      provide: 'IUrlService',
+      useClass: UrlService,
+    },
     {
       provide: 'IUrlRepository',
       useClass: UrlRepository,
     },
   ],
+  exports: ['IUrlService'],
 })
 export class UrlModule {}

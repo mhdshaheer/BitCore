@@ -3,7 +3,12 @@ import { MailService } from './mail.service';
 
 @Global()
 @Module({
-  providers: [MailService],
-  exports: [MailService],
+  providers: [
+    {
+      provide: 'IMailService',
+      useClass: MailService,
+    },
+  ],
+  exports: ['IMailService'],
 })
 export class MailModule {}
