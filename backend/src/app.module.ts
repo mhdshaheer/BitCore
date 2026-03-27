@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { UrlModule } from './url/url.module';
 import { MailModule } from './mail/mail.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     UrlModule,
     MailModule,
+    MonitoringModule,
   ],
   controllers: [],
   providers: [],

@@ -26,5 +26,10 @@ export const API_ROUTES = {
     SHORTEN: 'shorten',
     MY_URLS: 'my-urls',
     DELETE: (id: string) => `delete/${id}`,
+  },
+  MONITORING: {
+    PREFIX: 'monitoring',
+    PING: 'ping',
+    REGISTER: 'register',
   }
 };

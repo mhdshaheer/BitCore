@@ -9,4 +9,6 @@ export const MESSAGES = {
   VERIFICATION_SUCCESS: 'Email verified successfully',
   VERIFICATION_FAILED: 'Invalid or expired verification token',
   EMAIL_NOT_VERIFIED: 'Please verify your email before logging in',
+  MONITOR_REGISTERED: 'UptimeRobot monitor registered successfully',
+  MONITOR_REGISTRATION_FAILED: 'Failed to register monitor on UptimeRobot',
 };
