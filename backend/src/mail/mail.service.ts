@@ -21,10 +21,13 @@ export class MailService implements IMailService, OnModuleInit {
 
   async sendMail(to: string, subject: string, html: string): Promise<void> {
     try {
-      const from =
+      let from =
         this.configService.get<string>('MAIL_FROM') ||
-        '"BitCore" <noreply@bitcore.zenfit.space>';
+        'BitCore <noreply@zenfit.space>';
       
+      // Clean up accidental outer quotes if they exist
+      from = from.replace(/^["'](.+)["']$/, '$1');
+
       this.logger.log(`Attempting to send email to ${to} from ${from} with subject: ${subject}`);
         
       const result = await this.resend.emails.send({
