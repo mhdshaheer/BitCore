@@ -1,38 +1,36 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { IMailService } from './interfaces/mail-service.interface';
 
 @Injectable()
 export class MailService implements IMailService {
-  private transporter: nodemailer.Transporter;
+  private resend: Resend;
   private readonly logger = new Logger(MailService.name);
 
   constructor(private configService: ConfigService) {
-    this.transporter = nodemailer.createTransport({
-      service: this.configService.get<string>('EMAIL_SERVICE') || 'gmail',
-      auth: {
-        user: this.configService.get<string>('EMAIL_USER'),
-        pass: this.configService.get<string>('EMAIL_PASS'),
-      },
-    });
+    const apiKey = this.configService.get<string>('RESEND_API_KEY');
+    this.resend = new Resend(apiKey);
   }
 
   async sendMail(to: string, subject: string, html: string): Promise<void> {
     try {
       const from =
         this.configService.get<string>('MAIL_FROM') ||
-        '"BitCore" <noreply@bitcore.com>';
-      const info = (await this.transporter.sendMail({
+        '"BitCore" <noreply@bitcore.zenfit.space>';
+        
+      const { data, error } = await this.resend.emails.send({
         from,
         to,
         subject,
         html,
-      })) as { messageId: string };
+      });
 
-      this.logger.log(
-        `Email sent via ${this.configService.get('EMAIL_SERVICE') || 'gmail'}: ${info.messageId}`,
-      );
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      this.logger.log(`Email sent via Resend: ${data?.id}`);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Error sending email: ${message}`);
